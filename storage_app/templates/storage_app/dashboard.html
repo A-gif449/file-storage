@@ -1,0 +1,112 @@
+{% extends 'storage_app/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'upload' %}" class="btn btn-primary">
+            <i class="fas fa-upload"></i> Upload File
+        </a>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <h5>Total Files</h5>
+                        <h2>{{ total_files }}</h2>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-file fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <h5>Storage Used</h5>
+                        <h2>{{ total_size|filesizeformat }}</h2>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-database fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <h5>Shared Files</h5>
+                        <h2>{{ shared_files.count }}</h2>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-share-alt fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Files -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>My Files</h5>
+            </div>
+            <div class="card-body">
+                {% if owned_files %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Uploaded</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for file in owned_files|slice:":5" %}
+                            <tr>
+                                <td>{{ file.name }}</td>
+                                <td><span class="badge bg-secondary">{{ file.file_type }}</span></td>
+                                <td>{{ file.file_size|filesizeformat }}</td>
+                                <td>{{ file.uploaded_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <a href="{% url 'view_file' file.id %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'share_file' file.id %}" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-share"></i>
+                                    </a>
+                                    <a href="{% url 'delete_file' file.id %}" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No files uploaded yet. <a href="{% url 'upload' %}">Upload your first file!</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
