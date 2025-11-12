@@ -4,19 +4,12 @@
     {
       "src": "file_storage/wsgi.py",
       "use": "@vercel/python"
-    },
-    {
-      "src": "build_files.sh",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles"
-      }
     }
   ],
   "routes": [
     {
       "src": "/static/(.*)",
-      "dest": "/static/$1"
+      "handler": "file_storage/wsgi.application"
     },
     {
       "src": "/(.*)",
