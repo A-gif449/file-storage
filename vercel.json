@@ -2,18 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "file_storage/wsgi.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/static/(.*)",
-      "handler": "file_storage/wsgi.application"
+      "dest": "/static/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "file_storage/wsgi.py"
+      "dest": "api/index.py"
     }
   ]
 }
